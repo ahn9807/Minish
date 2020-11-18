@@ -15,9 +15,11 @@ void exec_external(char** argv)
     if(child_process_pid == 0) {
         if(execvp(argv[0], argv) == -1) {
             printf("Minish internal error - Could not make execv child process [%s]\n", argv[0]);
+            exit(-1);
         }
     } else {
-        wait(NULL);
+        wait(&prev_child_status);
+        fflush(stdout);
         current_child = -1;
     }
 } 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "shell.h"
 #include "exec_piped.h"
 #include "exec_external.h"
@@ -13,6 +14,7 @@ void exec_piped(char* argv_prev, char* argv_next)
     //fd 0 is read and 1 is write
     int fd[2];
     pid_t childpid;
+    pid_t childpid_piped;
 
     pipe(fd);
 
@@ -28,15 +30,18 @@ void exec_piped(char* argv_prev, char* argv_next)
         dup2(fd[1], STDOUT_FILENO);
         close(fd[1]);
 
+        char* argvs[MAX_INPUT_SIZE];
+
+        parse_space(argv_prev, argvs);
         //remove_padding(argv_prev);
-        exec_commend(argv_prev);
-        exit(0);
+        if(execvp(argvs[0], argvs) == -1) {
+            fprintf(stderr, "Minish internal error - Could not make execv child process [%s]\n", argvs[0]);
+            exit(0);
+        }
     } 
     else
     {
-        wait(NULL);
-
-        pid_t childpid_piped;
+        waitpid(childpid, &prev_child_status, 0);
 
         if((childpid_piped = fork()) == -1)
         {
@@ -50,12 +55,17 @@ void exec_piped(char* argv_prev, char* argv_next)
             dup2(fd[0], STDIN_FILENO);
             close(fd[0]);
 
-            //remove_padding(argv_next);
-            exec_commend(argv_next);
-            exit(0);
+            char* argvs[MAX_INPUT_SIZE];
+
+            parse_space(argv_next, argvs);
+            //remove_padding(argv_prev);
+            if(execvp(argvs[0], argvs) == -1) {
+                fprintf(stderr, "Minish internal error - Could not make execv child process [%s]\n", argvs[0]);
+                exit(0);
+            }
         } else {
-            wait(NULL);
-            print_shell();
+            waitpid(childpid_piped, &prev_child_status, 0);
+            fflush(stdout);
         }
     }
 

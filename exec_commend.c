@@ -2,6 +2,7 @@
 #include "exec_commend.h"
 #include "exec_piped.h"
 #include "exec_redirected.h"
+#include "exec_builtin.h"
 #include "parser.h"
 #include "minish_io.h"
 #include "shell.h"
@@ -33,6 +34,7 @@ int exec_commend(char* in) {
         case SHELL_NOTING:
             break;
         default:
+            shell_execute_mode = SHELL_INVALID;
             printf("Failed to interpretate input...\n");
             break;
     }

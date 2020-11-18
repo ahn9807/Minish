@@ -18,6 +18,7 @@ enum shell_mode {
 };
 
 static int current_child = -1;
+static int prev_child_status = 0;
 static jmp_buf main_context;
 
 typedef struct _child_info {

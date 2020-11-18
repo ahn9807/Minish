@@ -19,9 +19,7 @@ void exec_redirect(char* argv_prev, char* argv_next, int direction)
 
     if(child_process_pid == 0) {
         if(direction == REDIRECT_RIGHT) {
-
             remove_padding(&argv_next);
-            printf("%s\n", argv_next);
                 fflush(stdout);
             FILE* file_fp = fopen(argv_next, "w+");
             dup2(fileno(file_fp), STDOUT_FILENO);
@@ -29,7 +27,6 @@ void exec_redirect(char* argv_prev, char* argv_next, int direction)
             fclose(file_fp);
         } else {
             remove_padding(&argv_next);
-            printf("%s\n", argv_next);
             fflush(stdout);
             FILE* file_fp = fopen(argv_next, "r");
             if(file_fp == NULL) {
@@ -43,7 +40,7 @@ void exec_redirect(char* argv_prev, char* argv_next, int direction)
 
         exit(0);
     } else {
-        wait();
+        wait(&prev_child_status);
     }
 
 
