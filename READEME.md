@@ -1,6 +1,7 @@
 # Bash like shell implementation
 ## System programming 2020 fall - programming assignment 3
-### Ahn, Junho 2020 NOV 17
+### Ahn, Junho (20175097) 2020 NOV 17
+### github: https://github.com/ahn9807/Minish
 
 # Environment
 * linux 5.4.0-53-generic in vmware funsion of machintosh
@@ -13,7 +14,7 @@ help prints the help documetation of minish.
 
     junho:/home/junho/Desktop/HW3$ help
     MINISH Help
-    These shell commands are defined internally.  Type `help' to see this list.
+    These shell commands are defined internally.  Type `help' to see this list
 
     quit, pwd, cd ,help, path, status(not working correctly), cap
 
@@ -90,10 +91,15 @@ As an entry point of shell.c, infinite loop keeps minish run until quit commend 
 minish_io.c and parser.c take part of I/O and string parser in minish. Minish_io.c takes input and makes output shell prompt screen. Parser.c has various kinds of important parser including parse_space and parser_input. parse_input is the most important part of the parser.c. parse_input parse the input string and decide witch 
 
 ## exec_commend.c exec_builtin.c exec_piped.c exec_redirected.c 
+exec_commend.c get input as an argument of itself. With aid of parser.c, exec_commend parse the argument and call appropriate function to execute builtin, piped, redirected commend. 
 
 ## queue.c
+This is help script for implementing background and foreground job scheduling. Queue is implemented in linked list fasioned. 
 
 ## signal_handler.c
+signal_halder.c register appropriate actions for each siganls. 
 
 # Conclusion
+We can make bash like shell in c with aid of systemcall. Actually, shell such as zsh or bash is a just a programe that runs systemcall to execute any other programe user friendly in TUI environments. Some features such as auto complete or history is not implemented in this project. I want to extend my shell to have more real bash like strucuture if I have time.
 
+Overall architecture structure is designed by myself. 
